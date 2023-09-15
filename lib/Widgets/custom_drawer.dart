@@ -19,8 +19,7 @@ final  String? phn;
   Widget build(BuildContext context) {
     return Drawer(
       backgroundColor: Colors.cyan.withOpacity(.7),
-      child: ListView(
-        padding: EdgeInsets.zero,
+      child: Column(
         children: [
           UserAccountsDrawerHeader(
             currentAccountPicture: CircleAvatar(
@@ -37,9 +36,12 @@ final  String? phn;
           ),
           ListTile(
             leading: const Icon(Icons.logout,size: 30,),
-            title: const Text(
-              'Log Out',
-              style: TextStyle(fontSize: 20.0),
+            title:  const Text(
+              "Log Out",
+              style: TextStyle(
+                  color: Colors.black54,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 19),
             ),
             onTap: () async{
               final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -54,6 +56,42 @@ final  String? phn;
                   MaterialPageRoute(builder: (context)=> const LoginScreen()),
                       (route) => false);
             },
+          ),
+          Spacer(),
+          Card(
+          color :  Colors.cyan.withOpacity(.7),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Md. Mamun Islam Mim",
+                    style: TextStyle(
+                        color: Colors.black54,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 19),
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  const Text(
+                    "Software Developer",
+                    style: TextStyle(
+                        color: Colors.black54,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 16),
+                  ),
+                  const Text(
+                    "eAppair Software Limited",
+                    style: TextStyle(
+                        color: Colors.black54,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 16),
+                  ),
+                ],
+              ),
+            ),
           ),
         ],
       ),

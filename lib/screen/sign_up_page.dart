@@ -23,8 +23,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _instituteController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _iDController = TextEditingController();
+  bool _isButtonTapped = false;
   String batchNumber = '';
-  
    XFile? image;
 
   Future<void> _imagePicker() async {
@@ -49,14 +50,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.blueGrey.shade50,
-      // appBar: AppBar(
-      //   backgroundColor: Colors.blueGrey.shade400,
-      //   centerTitle: true,
-      //   title: const Text(
-      //     "Sign up",
-      //     style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-      //   ),
-      // ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(15),
         child: Column(
@@ -114,6 +107,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   borderRadius: BorderRadius.circular(15),
                   borderSide: BorderSide.none),
               child: TextField(
+                textInputAction: TextInputAction.next,
                 controller: _nameController,
                 decoration: InputDecoration(
                     hintText: "Enter Your Name",
@@ -131,6 +125,26 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   borderRadius: BorderRadius.circular(15),
                   borderSide: BorderSide.none),
               child: TextField(
+                textInputAction: TextInputAction.next,
+                keyboardType: TextInputType.number,
+                controller: _iDController,
+                decoration: InputDecoration(
+                    hintText: "Enter Your ID",
+                    // labelText: "Name",
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10))),
+              ),
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            Card(
+              color: Colors.grey.shade50,
+              shape: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: BorderSide.none),
+              child: TextField(
+                textInputAction: TextInputAction.next,
                 controller: _instituteController,
                 decoration: InputDecoration(
                   //  labelText: "Enter Your Institute Name",
@@ -148,6 +162,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   borderRadius: BorderRadius.circular(15),
                   borderSide: BorderSide.none),
               child: TextField(
+                textInputAction: TextInputAction.next,
                 controller: _emailController,
                 decoration: InputDecoration(
                     hintText: "Enter Your Email Address",
@@ -165,6 +180,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   borderRadius: BorderRadius.circular(15),
                   borderSide: BorderSide.none),
               child: TextField(
+                textInputAction: TextInputAction.next,
                 controller: _phoneController,
                 keyboardType: TextInputType.number,
                 inputFormatters: [
@@ -222,7 +238,30 @@ class _SignUpScreenState extends State<SignUpScreen> {
             const SizedBox(
               height: 15,
             ),
-            Card(
+         _isButtonTapped  ?  Card(
+           color: Colors.blueGrey,
+           shape: OutlineInputBorder(
+               borderRadius: BorderRadius.circular(15),
+               borderSide: BorderSide.none),
+           child: GestureDetector(
+             onTap: (){},
+             child: const Row(
+               mainAxisAlignment: MainAxisAlignment.center,
+               children: [
+                 Padding(
+                   padding: EdgeInsets.all(15.0),
+                   child: Text(
+                     "Create an Account",
+                     style: TextStyle(
+                         color: Colors.white,
+                         fontSize: 22,
+                         fontWeight: FontWeight.bold),
+                   ),
+                 )
+               ],
+             ),
+           ),
+         ) : Card(
               color: Colors.cyanAccent.shade700,
               shape: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
@@ -233,14 +272,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       _instituteController.text.isNotEmpty &&
                       _emailController.text.isNotEmpty &&
                       _phoneController.text.isNotEmpty &&
-                      image != null && batchNumber != '') {
+                      image != null && batchNumber != '' && _iDController.text.isNotEmpty) {
                     bool result =
                     await InternetConnectionChecker().hasConnection;
                     if (result == true) {
+                      setState(() {
+                        _isButtonTapped = true;
+                      });
                       await setImages();
                       var dateT = DateTime.now().minute.toString() + DateTime.now().second.toString();
                       var ran = Random().nextInt(4);
-                      print("__________________ $ran");
                       var uniqueKeys =
                           "${batchNumber}_${dateT}_$ran";
                       var model = SignUpModel(
@@ -250,6 +291,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           instituteName: _instituteController.text,
                           uniqueKey: uniqueKeys.toLowerCase(),
                           pictureUrl: _imageUrl, batchNo: batchNumber.toString(),
+                        batchID: _iDController.text,
                       );
 
                       EasyLoading.show(status: "Updating Data");
@@ -258,11 +300,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           .child("${_nameController.text}_$uniqueKeys")
                           .set(model.toJson());
                       await EasyLoading.showSuccess("Success");
+                      setState(() {
+                        _isButtonTapped = false;
+                      });
                       Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => const LoginScreen()));
                     } else {
+                      setState(() {
+                        _isButtonTapped = false;
+                      });
                       EasyLoading.showError(
                           "Please, Check Internet Connection");
                     }

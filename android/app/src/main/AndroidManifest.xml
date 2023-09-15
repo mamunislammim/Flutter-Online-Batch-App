@@ -1,7 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.our_flutter_team">
+        <uses-permission android:name="android.permission.INTERNET"/> <!-- Add this -->
     <application
-        android:label="our_flutter_team"
+        android:label="Flutter Team"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

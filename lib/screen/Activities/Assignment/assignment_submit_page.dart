@@ -7,19 +7,19 @@ import 'package:image_picker/image_picker.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:our_flutter_team/Widgets/custom_functions.dart';
 import 'package:our_flutter_team/screen/splash_screen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-import '../models/all_models.dart';
-
-class ImageSubmitScreen extends StatefulWidget {
-  const ImageSubmitScreen({Key? key, this.uniqueKey}) : super(key: key);
+import '../../../models/all_models.dart';
+ 
+class AssignmentSubmitScreen extends StatefulWidget {
+  const AssignmentSubmitScreen({Key? key, required this.uniqueKey}) : super(key: key);
   final String? uniqueKey;
   @override
-  State<ImageSubmitScreen> createState() => _ImageSubmitScreenState();
+  State<AssignmentSubmitScreen> createState() => _AssignmentSubmitScreenState();
 }
 
-class _ImageSubmitScreenState extends State<ImageSubmitScreen> {
-  bool _isTapped = false;
+class _AssignmentSubmitScreenState extends State<AssignmentSubmitScreen> {
+bool _isTapped = false;
+
   XFile? image;
   Future<void> _imagePicker() async {
     ImagePicker picker = ImagePicker();
@@ -98,10 +98,10 @@ class _ImageSubmitScreenState extends State<ImageSubmitScreen> {
                           color: Colors.blueGrey,
                         )),
                   )
-                      : SizedBox()
+                      : const SizedBox()
                 ],
               ),
-           _isTapped ? Card(
+           _isTapped ?  Card(
              margin: const EdgeInsets.only(left: 15, right: 15, top: 10),
              color: Colors.grey,
              shape: OutlineInputBorder(
@@ -125,8 +125,7 @@ class _ImageSubmitScreenState extends State<ImageSubmitScreen> {
                  ],
                ),
              ),
-           )
-               : Card(
+           ) :  Card(
                 margin: const EdgeInsets.only(left: 15, right: 15, top: 10),
                 color: Colors.blueGrey,
                 shape: OutlineInputBorder(
@@ -138,16 +137,14 @@ class _ImageSubmitScreenState extends State<ImageSubmitScreen> {
                     await InternetConnectionChecker().hasConnection;
                     if (result == true) {
                       setState(() {
-                        print("_________ $_isTapped ______ sss");
                         _isTapped = true;
-                        print("_________ $_isTapped ______ sss");
                       });
                       if (image != null) {
                         await setImages();
-                        var model = ImageSubmitModel(
+                        var model = AssignmentDataModel(
                             dateTime: "${DateTime.now()}",
                             uniqueKey: widget.uniqueKey,
-                            pictureUrl: _imageUrl);
+                            pictureUrl: _imageUrl, name: name, batchID: '');
                         EasyLoading.show(status: "Updating Data");
                         var d = DateTime.now()
                             .toString()
@@ -156,19 +153,21 @@ class _ImageSubmitScreenState extends State<ImageSubmitScreen> {
                             .replaceAll("-", "")
                             .replaceAll(".", "")
                             .substring(0, 15);
-                        print("__________d : $d");
-                        await FirebaseDatabase.instance
-                            .ref('Batch_${batch}_image')
-                            .child(uId.toString())
+                         await FirebaseDatabase.instance
+                            .ref('Assignment_submit_$batch')
+                            .child(widget.uniqueKey.toString())
                             .child(d)
                             .set(model.toJson());
                         await EasyLoading.showSuccess("Success");
-                        Navigator.pop(context);
-                      }else{
-                        showToast("Please Select Image First", Colors.red);
                         setState(() {
                           _isTapped = false;
                         });
+                        Navigator.pop(context);
+                      }else{
+                        setState(() {
+                          _isTapped = false;
+                        });
+                        showToast("Select Image", Colors.red);
                       }
                     }else{
                       showToast("Please Check Internet Connection", Colors.red);

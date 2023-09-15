@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:photo_view/photo_view.dart';
 
 class ImageSeen extends StatefulWidget {
   const ImageSeen({Key? key,required this.imgUrl}) : super(key: key);
@@ -12,11 +13,8 @@ class _ImageSeenState extends State<ImageSeen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      body: Image.network(
-        widget.imgUrl,
-        fit: BoxFit.fill,
-        height: size.height,
-        width: size.width,
+      body: PhotoView(
+        imageProvider: NetworkImage(widget.imgUrl),
       ),
     );
   }

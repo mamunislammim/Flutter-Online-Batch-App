@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:our_flutter_team/screen/home_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'login_screen.dart';
@@ -10,6 +11,7 @@ String phn = '';
 String institute = '';
 String profile = '';
 String batch = '';
+String batchID = '';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -67,4 +69,5 @@ class _SplashScreenState extends State<SplashScreen> {
                   image: AssetImage('asset/image/splash.png'))),
         ));
   }
-}
+
+ }

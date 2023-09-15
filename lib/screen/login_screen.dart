@@ -35,6 +35,7 @@ class _LoginScreenState extends State<LoginScreen> {
         prefs.setString("phone", a.studentContact.toString());
         prefs.setString("img", a.pictureUrl.toString());
         prefs.setString('batchNumber', a.batchNo.toString());
+        prefs.setString('batchID', a.batchID.toString());
         return true;
       }
     }
@@ -100,7 +101,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           contentPadding: const EdgeInsets.all(10),
                           hintText: "Enter Password",
                           prefixIcon: const Icon(
-                            Icons.call,
+                            Icons.key,
                             color: Colors.grey,
                           ),
                           hintStyle: const TextStyle(color: Colors.black),

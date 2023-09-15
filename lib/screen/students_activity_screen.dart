@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:our_flutter_team/screen/splash_screen.dart';
 import 'package:our_flutter_team/screen/view_full_image.dart';
 import '../controller/all_api_controller.dart';
+import 'image_submit_screen.dart';
 
 class StudentsActivityScreen extends StatefulWidget {
   const StudentsActivityScreen(
@@ -37,8 +39,6 @@ class _StudentsActivityScreenState extends State<StudentsActivityScreen> {
     phn = widget.phn;
     institute = widget.institute;
     img = widget.img;
-    print("\n--------Img : ${widget.img}");
-    print("\n--------Img : $img");
     setState(() {});
     super.initState();
   }
@@ -50,8 +50,6 @@ class _StudentsActivityScreenState extends State<StudentsActivityScreen> {
       backgroundColor: Colors.blueGrey.shade50,
       body: SafeArea(
         child: SingleChildScrollView(
-          // padding: EdgeInsets.zero,
-          // clipBehavior: Clip.none,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -64,7 +62,7 @@ class _StudentsActivityScreenState extends State<StudentsActivityScreen> {
                     child: Container(
                       decoration: const BoxDecoration(
                         image: DecorationImage(
-                            image: AssetImage('asset/image/login.png'),
+                            image: AssetImage('asset/image/bgi.png'),
                             fit: BoxFit.fill),
                       ),
                     ),
@@ -103,9 +101,9 @@ class _StudentsActivityScreenState extends State<StudentsActivityScreen> {
                           style: const TextStyle(
                               color: Colors.black, fontSize: 15),
                         ),
-                        Text(
-                          "Phone : ${phn.toString()}",
-                          style: const TextStyle(
+                        const Text(
+                          "Phone :  **************",
+                          style: TextStyle(
                               color: Colors.black, fontSize: 15),
                         ),
                       ],
@@ -118,13 +116,13 @@ class _StudentsActivityScreenState extends State<StudentsActivityScreen> {
               ),
               Card(
                 color: Colors.blueGrey.shade100,
-                child: const Row(
+                child:   const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Padding(
                       padding: EdgeInsets.all(8.0),
                       child: Text(
-                        "Flutter UI Design",
+                        "Activities",
                         style: TextStyle(
                           color: Colors.blueGrey,
                           fontWeight: FontWeight.bold,
@@ -139,6 +137,8 @@ class _StudentsActivityScreenState extends State<StudentsActivityScreen> {
                   future: GetAllData().getInformation(widget.uid),
                   builder: (_, snapshots) {
                     if (snapshots.hasData) {
+                      var snapData = snapshots.data;
+                       // snapData!.reversed;
                       return GridView.builder(
                         padding: const EdgeInsets.only(left: 5, right: 5),
                         physics: const BouncingScrollPhysics(),
@@ -173,8 +173,7 @@ class _StudentsActivityScreenState extends State<StudentsActivityScreen> {
                                     height: 120,
                                     decoration: BoxDecoration(
                                       image: DecorationImage(
-                                        image: NetworkImage(snapshots
-                                            .data![index].pictureUrl
+                                        image: NetworkImage(snapData![index].pictureUrl
                                             .toString()),
                                         //  image: AssetImage('asset/image/login.png'),
                                         fit: BoxFit.fill,
@@ -189,7 +188,7 @@ class _StudentsActivityScreenState extends State<StudentsActivityScreen> {
                                       "Date: ",
                                       style: TextStyle(fontSize: 13),
                                     ),
-                                    Text(snapshots.data![index].dateTime!
+                                    Text(snapData[index].dateTime!
                                         .substring(0, 10)
                                         .toString()),
                                   ],
@@ -201,7 +200,7 @@ class _StudentsActivityScreenState extends State<StudentsActivityScreen> {
                                       "Time: ",
                                       style: TextStyle(fontSize: 13),
                                     ),
-                                    Text(snapshots.data![index].dateTime!
+                                    Text(snapData[index].dateTime!
                                         .substring(10, 19)
                                         .toString())
                                   ],
@@ -216,6 +215,26 @@ class _StudentsActivityScreenState extends State<StudentsActivityScreen> {
                     }
                   })
             ],
+          ),
+        ),
+      ),
+      floatingActionButton: GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ImageSubmitScreen(
+                uniqueKey: uId.toString(),
+              ),
+            ),
+          );
+        },
+        child: const CircleAvatar(
+          backgroundColor: Colors.blueGrey,
+          radius: 30,
+          child: Icon(
+            Icons.add,
+            size: 45,
           ),
         ),
       ),
