@@ -5,7 +5,7 @@ import '../models/all_models.dart';
 import '../screen/splash_screen.dart';
 
 class GetAllData{
-  Future<List<ImageSubmitModel>>  getInformation(String uid)async{
+  Future<List<ImageSubmitModel>>  getInformation(String uid, String batch)async{
     List<ImageSubmitModel> data = [];
     await FirebaseDatabase.instance.ref('Batch_${batch}_image').child(uid).orderByKey().get().then((value) {
       for (var d in value.children) {

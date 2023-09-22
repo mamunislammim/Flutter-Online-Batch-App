@@ -44,7 +44,7 @@ class _SecondBatchPageState extends State<SecondBatchPage> {
                               snapshot.data![index].studentName.toString(),
                               img: snapshot.data![index].pictureUrl.toString(),
                               phn: snapshot.data![index].studentContact
-                                  .toString(),
+                                  .toString(), batch:  snapshot.data![index].batchNo.toString(),
                             ),
                           ),
                         );

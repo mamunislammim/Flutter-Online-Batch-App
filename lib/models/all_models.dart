@@ -70,17 +70,24 @@ class AssignmentQsnSubmitModel {
   String? dateTime;
   String? uniqueKey;
   String? text;
+  String? startDT;
+  String? endDT;
 
   AssignmentQsnSubmitModel(
       {required this.dateTime,
         required this.uniqueKey,
         required this.pictureUrl,
-      required this.text});
+      required this.text,
+      required this.startDT,
+        required this.endDT
+      });
   AssignmentQsnSubmitModel.fromJson(dynamic json) {
     uniqueKey = json['uniqueKey'];
     dateTime = json['dateTime'];
     pictureUrl = json['pictureUrl'];
     text = json['text'];
+    startDT = json['startDT'];
+    endDT = json['endDT'];
   }
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -88,6 +95,8 @@ class AssignmentQsnSubmitModel {
     map['dateTime'] = dateTime;
     map['pictureUrl'] = pictureUrl;
     map['text'] = text;
+    map['startDT'] = startDT;
+    map['endDT'] = endDT;
     return map;
   }
 }

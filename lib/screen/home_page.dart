@@ -85,7 +85,7 @@ class _HomePageState extends State<HomePage> {
                               institute: institute,
                               name: name,
                               img: profile,
-                              phn: phn),),
+                              phn: phn, batch: batch,),),
                     );
                   },
                   child: Card(
@@ -201,7 +201,7 @@ class _HomePageState extends State<HomePage> {
                                                       .toString(),
                                                   phn: snapshot.data![index]
                                                       .studentContact
-                                                      .toString(),
+                                                      .toString(), batch:  snapshot.data![index].batchNo.toString(),
                                                 ),
                                               ),
                                             );
@@ -336,7 +336,7 @@ class _HomePageState extends State<HomePage> {
                                                       .toString(),
                                                   phn: snapshot.data![index]
                                                       .studentContact
-                                                      .toString(),
+                                                      .toString(), batch:  snapshot.data![index].batchNo.toString(),
                                                 ),
                                               ),
                                             );

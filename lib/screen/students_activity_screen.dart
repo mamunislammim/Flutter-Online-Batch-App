@@ -12,7 +12,7 @@ class StudentsActivityScreen extends StatefulWidget {
       required this.institute,
       required this.name,
       required this.img,
-      required this.phn})
+      required this.phn, required this.batch})
       : super(key: key);
   final String uid;
   final String name;
@@ -20,6 +20,7 @@ class StudentsActivityScreen extends StatefulWidget {
   final String institute;
   final String phn;
   final String img;
+  final String batch;
   @override
   State<StudentsActivityScreen> createState() => _StudentsActivityScreenState();
 }
@@ -134,7 +135,7 @@ class _StudentsActivityScreenState extends State<StudentsActivityScreen> {
                 ),
               ),
               FutureBuilder(
-                  future: GetAllData().getInformation(widget.uid),
+                  future: GetAllData().getInformation(widget.uid, widget.name),
                   builder: (_, snapshots) {
                     if (snapshots.hasData) {
                       var snapData = snapshots.data;

@@ -7,7 +7,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:our_flutter_team/Widgets/custom_functions.dart';
 import 'package:our_flutter_team/screen/splash_screen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/all_models.dart';
 
@@ -31,8 +30,8 @@ class _ImageSubmitScreenState extends State<ImageSubmitScreen> {
   Future<void> setImages() async {
     EasyLoading.show(status: "Uploading Image");
     var snapshot = await FirebaseStorage.instance
-        .ref("Flutter Ui")
-        .child(DateTime.now().microsecondsSinceEpoch.toString())
+        .ref("UI_Submit_Batch_$batch")
+        .child("${name}_${batchID}_${DateTime.now().microsecondsSinceEpoch.toString()}")
         .putFile(File(image!.path));
     _imageUrl = await snapshot.ref.getDownloadURL();
     EasyLoading.showSuccess("Done");

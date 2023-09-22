@@ -31,8 +31,8 @@ bool _isTapped = false;
   Future<void> setImages() async {
     EasyLoading.show(status: "Uploading Image");
     var snapshot = await FirebaseStorage.instance
-        .ref("Flutter Ui")
-        .child(DateTime.now().microsecondsSinceEpoch.toString())
+        .ref("Assignment_answer_Batch_$batch")
+        .child("${name}_${batchID}_${DateTime.now().microsecondsSinceEpoch.toString()}")
         .putFile(File(image!.path));
     _imageUrl = await snapshot.ref.getDownloadURL();
     EasyLoading.showSuccess("Done");

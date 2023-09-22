@@ -3,7 +3,6 @@ import 'package:our_flutter_team/controller/all_api_controller.dart';
 import 'package:our_flutter_team/screen/Activities/Assignment/assignment_details_page.dart';
 import 'package:our_flutter_team/screen/Activities/Assignment/assignment_question_submit_page.dart';
 import 'package:our_flutter_team/screen/splash_screen.dart';
-
 import '../../../models/all_models.dart';
 
 class AssignmentListPage extends StatefulWidget {
@@ -14,6 +13,18 @@ class AssignmentListPage extends StatefulWidget {
 }
 
 class _AssignmentListPageState extends State<AssignmentListPage> {
+  DateTime? nowDT;
+  bool checkDT = false;
+  showDT()async{
+    nowDT = DateTime.now();
+  }
+
+  @override
+  void initState() {
+    showDT();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,15 +41,20 @@ class _AssignmentListPageState extends State<AssignmentListPage> {
               List<AssignmentQsnSubmitModel> a = snapshot.data!.toList();
               List<AssignmentQsnSubmitModel> data = a.reversed.toList();
               return ListView.builder(
-                padding: EdgeInsets.all(5),
+                padding: const EdgeInsets.all(5),
                   itemCount: data.length,
-                  itemBuilder: (context, index) {
+                  itemBuilder: (context, index){
+                  var startDate = DateTime.tryParse(data[index].startDT.toString());
+                  var endDate = DateTime.tryParse(data[index].endDT.toString());
+                   if(nowDT != null){
+                     checkDT = nowDT!.isAfter(startDate!) && nowDT!.isBefore(endDate!);
+                   }
                     return  GestureDetector(
                       onTap: (){
                         Navigator.push(context, MaterialPageRoute(builder: (context)=> AssignmentDetailsPage(text: data[index].text, image: data[index].pictureUrl, dateTimes: data[index].dateTime)));
                       },
                       child: Card(
-                        color: Colors.cyanAccent.withOpacity(.5),
+                        color: checkDT == true ? Colors.green : Colors.red ,
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Row(
@@ -62,9 +78,9 @@ class _AssignmentListPageState extends State<AssignmentListPage> {
                                           fontSize: 16,
                                           color: Colors.white, fontWeight: FontWeight.w400),
                                     ),
-                                    Text("Start Time : ",maxLines: 2,overflow: TextOverflow.ellipsis,),
-                                    Text("End Time : ",maxLines: 2,overflow: TextOverflow.ellipsis,)
-                                  ],
+                                    Text("Start :   $startDate"),
+                                    Text("End :   $endDate"),
+                                     ],
                                 ),
                               ),
 
