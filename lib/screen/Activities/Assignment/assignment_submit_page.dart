@@ -8,8 +8,8 @@ import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:our_flutter_team/Widgets/custom_functions.dart';
 import 'package:our_flutter_team/screen/splash_screen.dart';
 
-import '../../../models/all_models.dart';
- 
+import '../../../models/assignment_submit_model.dart';
+
 class AssignmentSubmitScreen extends StatefulWidget {
   const AssignmentSubmitScreen({Key? key, required this.uniqueKey}) : super(key: key);
   final String? uniqueKey;
@@ -31,8 +31,8 @@ bool _isTapped = false;
   Future<void> setImages() async {
     EasyLoading.show(status: "Uploading Image");
     var snapshot = await FirebaseStorage.instance
-        .ref("Assignment_answer_Batch_$batch")
-        .child("${name}_${batchID}_${DateTime.now().microsecondsSinceEpoch.toString()}")
+        .ref("Assignment_answer_Batch_$myBatch")
+        .child("${myName}_${myBatchID}_${DateTime.now().microsecondsSinceEpoch.toString()}")
         .putFile(File(image!.path));
     _imageUrl = await snapshot.ref.getDownloadURL();
     EasyLoading.showSuccess("Done");
@@ -133,9 +133,6 @@ bool _isTapped = false;
                     borderSide: BorderSide.none),
                 child: GestureDetector(
                   onTap: () async {
-                    bool result =
-                    await InternetConnectionChecker().hasConnection;
-                    if (result == true) {
                       setState(() {
                         _isTapped = true;
                       });
@@ -144,7 +141,7 @@ bool _isTapped = false;
                         var model = AssignmentDataModel(
                             dateTime: "${DateTime.now()}",
                             uniqueKey: widget.uniqueKey,
-                            pictureUrl: _imageUrl, name: name, batchID: '');
+                            pictureUrl: _imageUrl, name: myName, batchID: myBatchID);
                         EasyLoading.show(status: "Updating Data");
                         var d = DateTime.now()
                             .toString()
@@ -154,9 +151,9 @@ bool _isTapped = false;
                             .replaceAll(".", "")
                             .substring(0, 15);
                          await FirebaseDatabase.instance
-                            .ref('Assignment_submit_$batch')
+                            .ref('Assignment_submit_$myBatch')
                             .child(widget.uniqueKey.toString())
-                            .child(d)
+                            .child("${myUID}_$d")
                             .set(model.toJson());
                         await EasyLoading.showSuccess("Success");
                         setState(() {
@@ -169,9 +166,6 @@ bool _isTapped = false;
                         });
                         showToast("Select Image", Colors.red);
                       }
-                    }else{
-                      showToast("Please Check Internet Connection", Colors.red);
-                    }
                   },
                   child: const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -197,3 +191,4 @@ bool _isTapped = false;
     );
   }
 }
+

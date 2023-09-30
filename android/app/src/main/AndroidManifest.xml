@@ -24,6 +24,10 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
+                 <action android:name="android.intent.action.VIEW" />
+                <action android:name="com.dsociety.activities.MyBrowser" />
+                <action android:name="com.scytec.datamobile.vd.gui.android.AppPreferenceActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <!-- Don't delete the meta-data below.

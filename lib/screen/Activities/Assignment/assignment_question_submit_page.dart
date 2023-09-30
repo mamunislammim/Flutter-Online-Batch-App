@@ -4,10 +4,9 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:our_flutter_team/screen/splash_screen.dart';
 import '../../../Widgets/custom_functions.dart';
-import '../../../models/all_models.dart';
+import '../../../models/assignment_question_submit_model.dart';
 
 class AssignmentQuestionSubmitScreen extends StatefulWidget {
   const AssignmentQuestionSubmitScreen({Key? key, this.uniqueKey})
@@ -21,6 +20,7 @@ class AssignmentQuestionSubmitScreen extends StatefulWidget {
 class _AssignmentQuestionSubmitScreenState
     extends State<AssignmentQuestionSubmitScreen> {
   final TextEditingController _textControllers = TextEditingController();
+  final TextEditingController _marksControllers = TextEditingController();
 
   XFile? image;
   Future<void> _imagePicker() async {
@@ -33,8 +33,8 @@ class _AssignmentQuestionSubmitScreenState
   Future<void> setImages() async {
     EasyLoading.show(status: "Uploading Image");
     var snapshot = await FirebaseStorage.instance
-        .ref("Assignment_Question_Batch_$batch")
-        .child("${name}_${batchID}_${DateTime.now().toString()}")
+        .ref("Assignment_Question_Batch_$myBatch")
+        .child("${myName}_${myBatchID}_${DateTime.now().toString()}")
         .putFile(File(image!.path));
     _imageUrl = await snapshot.ref.getDownloadURL();
     EasyLoading.showSuccess("Done");
@@ -97,14 +97,15 @@ class _AssignmentQuestionSubmitScreenState
                               });
                             },
                             child: Card(
-                                color: Colors.blueGrey.shade50,
-                                child: const Icon(
-                                  Icons.close,
-                                  size: 40,
-                                  color: Colors.blueGrey,
-                                )),
+                              color: Colors.blueGrey.shade50,
+                              child: const Icon(
+                                Icons.close,
+                                size: 40,
+                                color: Colors.blueGrey,
+                              ),
+                            ),
                           )
-                        : SizedBox()
+                        : const SizedBox()
                   ],
                 ),
                 Card(
@@ -132,14 +133,8 @@ class _AssignmentQuestionSubmitScreenState
                               setState(() {
                                 startDateTime = a.toString();
                               });
-                              print("_____ A : $a   ");
-                              var nowDT = DateTime.now();
-                              print("______Now Time : $nowDT");
-                              print("________     ${nowDT.isAfter(a)}   _____________ ");
-                              String st = "2023-09-22 17:35:47.431077";
-                              print("__________________parse : ${DateTime.tryParse(st)} ");
                             },
-                            icon: Icon(Icons.date_range)),
+                            icon: const Icon(Icons.date_range)),
                         Text(startDateTime)
                       ],
                     ),
@@ -152,18 +147,24 @@ class _AssignmentQuestionSubmitScreenState
                               setState(() {
                                 endDateTime = a.toString();
                               });
-                              print("_____ A : $a   ");
-                              var nowDT = DateTime.now();
-                              print("______Now Time : $nowDT");
-                              print("________     ${nowDT.isAfter(a)}   _____________ ");
-                          String st = "2023-09-22 17:35:47.431077";
-                           print("__________________parse : ${DateTime.tryParse(st)} ");
                             },
-                            icon: Icon(Icons.date_range)),
+                            icon: const Icon(Icons.date_range)),
                         Text(endDateTime)
                       ],
                     ),
                   ],
+                ),
+                SizedBox(
+                  height: 50,
+                  child: TextField(
+                    keyboardType: TextInputType.number,
+                    controller: _marksControllers,
+                    decoration: InputDecoration(
+                        hintText: "Assignment Marks",
+                        // labelText: "Enter Your Email Address",
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10))),
+                  ),
                 ),
                 Card(
                   margin: const EdgeInsets.only(left: 15, right: 15, top: 10),
@@ -173,34 +174,30 @@ class _AssignmentQuestionSubmitScreenState
                       borderSide: BorderSide.none),
                   child: GestureDetector(
                     onTap: () async {
-                      bool result =
-                          await InternetConnectionChecker().hasConnection;
-                      if (result == true) {
-                        if (image != null) {
-                          await setImages();
-                          var d = DateTime.now()
-                              .toString()
-                              .replaceAll(":", "")
-                              .replaceAll(" ", "_")
-                              .replaceAll("-", "")
-                              .replaceAll(".", "")
-                              .substring(0, 15);
-                          var model = AssignmentQsnSubmitModel(
-                              dateTime: d,
-                              uniqueKey: widget.uniqueKey,
-                              pictureUrl: _imageUrl,
-                              text: _textControllers.text,
-                              startDT: startDateTime,
-                              endDT: endDateTime);
-                          EasyLoading.show(status: "Updating Data");
-                          print("__________d : $d");
-                          await FirebaseDatabase.instance
-                              .ref('Assignment_Question_Batch_$batch')
-                              .child(d)
-                              .set(model.toJson());
-                          await EasyLoading.showSuccess("Success");
-                          Navigator.pop(context);
-                        }
+                      if (image != null) {
+                        await setImages();
+                        var d = DateTime.now()
+                            .toString()
+                            .replaceAll(":", "")
+                            .replaceAll(" ", "_")
+                            .replaceAll("-", "")
+                            .replaceAll(".", "")
+                            .substring(0, 15);
+                        var model = AssignmentQsnSubmitModel(
+                            dateTime: d,
+                            uniqueKey: widget.uniqueKey,
+                            pictureUrl: _imageUrl,
+                            text: _textControllers.text,
+                            startDT: startDateTime,
+                            endDT: endDateTime,
+                            marks: _marksControllers.text);
+                        EasyLoading.show(status: "Updating Data");
+                        await FirebaseDatabase.instance
+                            .ref('Assignment_Question_Batch_$myBatch')
+                            .child(d)
+                            .set(model.toJson());
+                        await EasyLoading.showSuccess("Success");
+                        Navigator.pop(context);
                       }
                     },
                     child: const Row(

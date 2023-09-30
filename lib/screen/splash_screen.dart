@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:our_flutter_team/screen/home_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'login_screen.dart';
 
-String uId = '';
-String email = '';
-String name = '';
-String phn = '';
-String institute = '';
-String profile = '';
-String batch = '';
-String batchID = '';
+String myUID = '';
+String myEmail = '';
+String myName = '';
+String myPhn = '';
+String myInstitute = '';
+String myProfile = '';
+String myBatch = '';
+String myBatchID = '';
+String myPassword = '';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -24,20 +24,18 @@ class _SplashScreenState extends State<SplashScreen> {
   Future checkLoggedIn() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      uId = prefs.getString("uid") ?? '';
-      name = prefs.getString("name") ?? '';
-      email = prefs.getString("email") ?? '';
+      myUID = prefs.getString("uid") ?? '';
+      myName = prefs.getString("name") ?? '';
+      myEmail = prefs.getString("email") ?? '';
     });
-    print("____ $uId  _$name  $email");
-    if (uId != '' || name != '' || email != '') {
+    if (myUID != '' || myName != '' || myEmail != '') {
       Future.delayed(const Duration(seconds: 2)).then(
         (value) => Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const HomePage(),
-          ),
-            (r)=> false
-        ),
+            context,
+            MaterialPageRoute(
+              builder: (context) => const HomePage(),
+            ),
+            (r) => false),
       );
     } else {
       Future.delayed(const Duration(seconds: 2)).then(
@@ -54,7 +52,6 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     checkLoggedIn();
-    print("____111111111 $uId  _$name  $email");
     super.initState();
   }
 
@@ -69,5 +66,4 @@ class _SplashScreenState extends State<SplashScreen> {
                   image: AssetImage('asset/image/splash.png'))),
         ));
   }
-
- }
+}

@@ -11,8 +11,7 @@ class ImageSeen extends StatefulWidget {
 class _ImageSeenState extends State<ImageSeen> {
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    return Scaffold(
+     return Scaffold(
       body: PhotoView(
         imageProvider: NetworkImage(widget.imgUrl),
       ),

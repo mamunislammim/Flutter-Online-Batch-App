@@ -12,7 +12,9 @@ class StudentsActivityScreen extends StatefulWidget {
       required this.institute,
       required this.name,
       required this.img,
-      required this.phn, required this.batch})
+      required this.phn,
+      required this.batch,
+      required this.batchID})
       : super(key: key);
   final String uid;
   final String name;
@@ -21,6 +23,7 @@ class StudentsActivityScreen extends StatefulWidget {
   final String phn;
   final String img;
   final String batch;
+  final String batchID;
   @override
   State<StudentsActivityScreen> createState() => _StudentsActivityScreenState();
 }
@@ -41,6 +44,7 @@ class _StudentsActivityScreenState extends State<StudentsActivityScreen> {
     institute = widget.institute;
     img = widget.img;
     setState(() {});
+    print("____11____ $myUID   $uid");
     super.initState();
   }
 
@@ -102,9 +106,9 @@ class _StudentsActivityScreenState extends State<StudentsActivityScreen> {
                           style: const TextStyle(
                               color: Colors.black, fontSize: 15),
                         ),
-                        const Text(
-                          "Phone :  **************",
-                          style: TextStyle(
+                        Text(
+                          "Batch : ${widget.batch}          Batch ID : ${widget.batchID}",
+                          style: const TextStyle(
                               color: Colors.black, fontSize: 15),
                         ),
                       ],
@@ -117,7 +121,7 @@ class _StudentsActivityScreenState extends State<StudentsActivityScreen> {
               ),
               Card(
                 color: Colors.blueGrey.shade100,
-                child:   const Row(
+                child: const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Padding(
@@ -135,11 +139,11 @@ class _StudentsActivityScreenState extends State<StudentsActivityScreen> {
                 ),
               ),
               FutureBuilder(
-                  future: GetAllData().getInformation(widget.uid, widget.name),
+                  future: GetAllData().getInformation(widget.uid, widget.batch),
                   builder: (_, snapshots) {
                     if (snapshots.hasData) {
                       var snapData = snapshots.data;
-                       // snapData!.reversed;
+                      // snapData!.reversed;
                       return GridView.builder(
                         padding: const EdgeInsets.only(left: 5, right: 5),
                         physics: const BouncingScrollPhysics(),
@@ -174,7 +178,8 @@ class _StudentsActivityScreenState extends State<StudentsActivityScreen> {
                                     height: 120,
                                     decoration: BoxDecoration(
                                       image: DecorationImage(
-                                        image: NetworkImage(snapData![index].pictureUrl
+                                        image: NetworkImage(snapData![index]
+                                            .pictureUrl
                                             .toString()),
                                         //  image: AssetImage('asset/image/login.png'),
                                         fit: BoxFit.fill,
@@ -189,7 +194,8 @@ class _StudentsActivityScreenState extends State<StudentsActivityScreen> {
                                       "Date: ",
                                       style: TextStyle(fontSize: 13),
                                     ),
-                                    Text(snapData[index].dateTime!
+                                    Text(snapData[index]
+                                        .dateTime!
                                         .substring(0, 10)
                                         .toString()),
                                   ],
@@ -201,7 +207,8 @@ class _StudentsActivityScreenState extends State<StudentsActivityScreen> {
                                       "Time: ",
                                       style: TextStyle(fontSize: 13),
                                     ),
-                                    Text(snapData[index].dateTime!
+                                    Text(snapData[index]
+                                        .dateTime!
                                         .substring(10, 19)
                                         .toString())
                                   ],
@@ -219,13 +226,13 @@ class _StudentsActivityScreenState extends State<StudentsActivityScreen> {
           ),
         ),
       ),
-      floatingActionButton: GestureDetector(
+      floatingActionButton: myUID == widget.uid ? GestureDetector(
         onTap: () {
           Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => ImageSubmitScreen(
-                uniqueKey: uId.toString(),
+                uniqueKey: myUID.toString(),
               ),
             ),
           );
@@ -238,7 +245,7 @@ class _StudentsActivityScreenState extends State<StudentsActivityScreen> {
             size: 45,
           ),
         ),
-      ),
+      ) : const SizedBox(),
     );
   }
 }

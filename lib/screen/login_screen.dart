@@ -4,7 +4,7 @@ import 'package:our_flutter_team/controller/all_api_controller.dart';
 import 'package:our_flutter_team/screen/home_page.dart';
 import 'package:our_flutter_team/screen/sign_up_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../models/all_models.dart';
+import '../models/sign_up_models.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -22,13 +22,11 @@ class _LoginScreenState extends State<LoginScreen> {
   Future<bool> getData(String phn, String pass, String batch) async {
     List<SignUpModel> data = await GetAllData().getUserInfo(batchNumber);
     for(var a in data){
-      var uKey = a.uniqueKey!.replaceAll('_', '');
-      print("_______data______${a.studentContact}___ ${a.uniqueKey}  ${a.batchNo}");
-      print("_______log______$phn $pass $batch");
-      if(a.studentContact == phn && uKey == pass && a.batchNo == batch){
-        print("__________________ Found  ");
-        final SharedPreferences prefs = await SharedPreferences.getInstance();
-        prefs.setString("uid", a.uniqueKey.toString());
+      var passWord = a.password!.replaceAll('_', '');
+        if(a.studentContact == phn && passWord == pass && a.batchNo == batch){
+         final SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString("uid", a.uniqueID.toString());
+        prefs.setString("pass", a.password.toString());
         prefs.setString("name", a.studentName.toString());
         prefs.setString("email", a.email.toString());
         prefs.setString("institute", a.instituteName.toString());

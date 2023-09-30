@@ -1,6 +1,7 @@
-
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:our_flutter_team/Common%20Files/app_colors.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 void showToast(String toast, Color color){
   Fluttertoast.showToast(
@@ -40,12 +41,30 @@ Future<DateTime> selectDateTime(BuildContext context) async {
         pickedTime.hour,
         pickedTime.minute,
       );
-      print("_________${selectedDate}  ${selectedDate.runtimeType}");
-      // print("___PickDate : $pickedDate  __ Pick Time : $pickedTime  ${selectedDate}");
-      // var nowDT = DateTime.now();
-      // print("______Now Time : $nowDT");
-      // print("________     ${nowDT.isAfter(selectedDate)}   _____________ ");
-    }
+       }
   }
   return selectedDate;
+}
+
+
+Future openUrl(String url) async {
+  if(url.contains("https://")){
+    debugPrint("_______________ Okay");
+  }else{
+    debugPrint("_______________No");
+    url = "https://$url";
+  }
+  try {
+    if (await launchUrl(Uri.parse(url),
+        mode: LaunchMode.platformDefault)) {
+      showToast("Success", buttonColor);
+    } else {
+      debugPrint('#1: Could not launch $url');
+      showToast("Could not launch.!", Colors.red);
+    }
+  } catch (e) {
+    debugPrint('#2: Could not launch $url');
+    debugPrint('___________ $e');
+    showToast("Error..", Colors.red);
+  }
 }
